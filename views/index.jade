@@ -1,0 +1,114 @@
+!!! 5
+head
+  title Calendar
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  if rtl
+    link(rel='stylesheet', type='text/css', href='/rtl.css')
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap-rtl.css')
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap-responsive-rtl.css')
+  else
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap.css')
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap-responsive.css')
+  link(rel='stylesheet', type='text/css', href='/style.css')
+
+  body
+    .direction
+      .btn-group
+        .btn.btn-mini(class=(rtl ? '':'btn-primary'))
+          if rtl
+            a(href='/') LTR
+          else
+            | LTR
+        .btn.btn-mini(class=(rtl ? 'btn-primary':''))
+          if !rtl
+            a(href='/?rtl=true') RTL
+          else
+            | RTL
+    .container-fluid
+      .row-fluid
+        .span2
+          .well
+            | instructions...
+        .span10
+          .row-fluid
+            .span6
+              form
+                fieldset
+                  legend Single Inline Calendar
+                  .calendar-inline-single
+            .span6
+              form
+                fieldset
+                  legend Dual Inline Calendar
+                  .calendar-inline-dual
+          .row-fluid
+            .span6
+              form
+                fieldset
+                  legend Single Calendar Form Control
+                  .input-prepend
+                    .add-on
+                      i.icon-calendar
+                    input(type='text', placeholder='Select date', onfocus='createSingleCalendar()').input-small
+            .span6
+              form
+                fieldset
+                  legend Dual Calendar Form Control
+                  .input-prepend
+                    .add-on
+                      i.icon-calendar
+                    input(type='text', placeholder='Select date', onfocus='createDualCalendar()').input-small
+          .row-fluid
+            .span6
+              form
+                fieldset
+                  legend Multi-select Calendar
+                  .calendar-inline-multi
+            .span6
+              form
+                fieldset
+                  legend Paired Multi-select Calendars
+                  .calendar-inline-paired
+          .row-fluid
+            .span6
+              form
+                fieldset
+                  legend Multi-select Calendar Form Control
+                  .input-prepend
+                    .add-on
+                      i.icon-calendar
+                    input(type='text', placeholder='Select your dates', onfocus='createMultiCalendar()').input-large
+            .span6
+              form
+                fieldset
+                  legend Paired Multi-select Calendar Form Control
+                  .controls-row
+                    .input-prepend.span4
+                      .add-on
+                        i.icon-calendar
+                      input(type='text', placeholder='Select date', onfocus='createPairedCalendar()').input-small
+                    .input-prepend.span4
+                      .add-on
+                        i.icon-calendar
+                      input(type='text', placeholder='Select date', onfocus='createPairedCalendar()').input-small
+
+    footer
+      .container
+        p
+          span(xmlns:dct="http://purl.org/dc/terms/", property="dct:title") Calendar
+          |  by 
+          a(xmlns:cc="http://creativecommons.org/ns#", href="http://www.tripadvisor.com", property="cc:attributionName", rel="cc:attributionURL") TripAdvisor, LLC
+          |  is licensed under a 
+          a(rel="license", href="http://creativecommons.org/licenses/by/3.0/deed.en_US") Creative Commons Attribution 3.0 Unported License
+          | .
+
+  script(type='application/javascript', src='/underscore-min.js')
+  script(type='application/javascript', src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+  // script(type='application/javascript', src='//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js')
+  script(type='application/javascript', src='/Deferred.js')
+  script(type='application/javascript', src='/Syncro.js')
+  script(type='application/javascript', src='/EventBus.js')
+  script(type='application/javascript', src='/api.js')
+  script(type='application/javascript', src='/DateHelper.js')
+  script(type='application/javascript', src='/Calendar.js')
+  script(type='application/javascript', src='/app.js')
