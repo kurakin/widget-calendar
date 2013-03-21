@@ -14,16 +14,14 @@ head
   body
     .direction
       .btn-group
-        .btn.btn-mini(class=(rtl ? '':'btn-primary'))
-          if rtl
-            a(href='/') LTR
-          else
-            | LTR
-        .btn.btn-mini(class=(rtl ? 'btn-primary':''))
-          if !rtl
-            a(href='/?rtl=true') RTL
-          else
-            | RTL
+        if rtl
+          a(href='/').btn.btn-mini LTR
+        else
+          .btn.btn-mini.btn-primary LTR
+        if !rtl
+          a(href='/?rtl=true').btn.btn-mini RTL
+        else
+          .btn.btn-mini.btn-primary RTL
     .container-fluid
       .row-fluid
         .span2

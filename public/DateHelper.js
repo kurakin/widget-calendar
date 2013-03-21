@@ -7,7 +7,7 @@ var DateHelper = (function (api, undefined) {
   var daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
 
   var DateHelper = function ( date ) {
-    this.date = date || new Date ();
+    this.date = date ? new Date ( date.getTime () ) : new Date ();
   };
 
   DateHelper.prototype.zeroTime = function () {

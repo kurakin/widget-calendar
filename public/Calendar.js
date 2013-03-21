@@ -57,17 +57,17 @@ var Calendar = (function (api) {
     }
   };
 
-  var renderMonth = function ( date ) {
+  var renderMonth = window.renderMonth = function ( date ) {
     var currentMonth = date.getMonth ()
-      , day = new DateHelper ( date ).startOfWeek ()
-      , end = new DateHelper ( day.toDate () ).endOfMonth ().endOfWeek ()
+      , day = new DateHelper ( date ).startOfMonth ().startOfWeek ()
+      , end = new DateHelper ( date ).endOfMonth ().endOfWeek ()
       , month = []
       , week = []
       , w = 1
-      , i = 1
+      , i = 0
       ;
 
-    while ( day.date.getTime () <= end.date.getTime () && i < 50 ) {
+    while ( day.date.getTime () <= end.date.getTime () ) {
       week.push ( this.options.render.day ( day.date.getMonth (), day.date.getDate (), false, false, false, day.date.getMonth () !== currentMonth ) );
       i++;
       if ( i % 7 === 0 ) {
