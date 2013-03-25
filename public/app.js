@@ -14,30 +14,34 @@ $( function () {
     });
   }
 
+  var renderHeader = function ( month ) {
+    return '<tr><th colspan=7>' + monthNames [ month ] + '</th></tr>' + dayHeader;
+  };
+
   // .calendar-inline-single
-  new Calendar ({
-    render : {
-      header : function ( month ) {
-        return '<tr><th colspan=7>' + monthNames [ month ] + '</th></tr>' + dayHeader;
+  $('.calendar-inline-single').append (
+    new Calendar ({
+      render : {
+        header : renderHeader
       }
-    }
-  , onCreate : function ( cal ) {
-      $('.calendar-inline-single').append ( cal.render ().container );
-    }
-  });
+    })
+      .use ( Calendar.mixin.invalid )
+      .render ()
+      .container
+  );
 
   // .calendar-inline-dual
-  new Calendar ({
-    months : 2
-  , render : {
-      header : function ( month ) {
-        return '<tr><th colspan=7>' + monthNames [ month ] + '</th></tr>' + dayHeader;
+  $('.calendar-inline-dual').append (
+    new Calendar ({
+      months : 2
+    , render : {
+        header : renderHeader
       }
-    }
-  , onCreate : function ( cal ) {
-      $('.calendar-inline-dual').append ( cal.render ().container );
-    }
-  });
+    })
+      .use ( Calendar.mixin.invalid )
+      .render ()
+      .container
+  );
 
   // .calendar-inline-multi
 

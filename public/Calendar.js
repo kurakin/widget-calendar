@@ -17,15 +17,16 @@ var Calendar = (function (api) {
   , containerClass : 'calendar'
   , daySelector : '.day'
   , render : {
-      day : function ( month, day, selected, today, invalid, overflow ) {
-        var r = [ '<td>' ];
-        r.push ( '<span class="day' );
-        if ( today ) { r.push ( 'today' ); }
-        if ( selected ) { r.push ( 'selected' ); }
-        if ( invalid ) { r.push ( 'invalid' ); }
+      day : function ( date, overflow, tdClass ) {
+        var r = [ '<td class="day' ];
+        tdClass && r.push ( ' ' ) && r.push ( tdClass );
         r.push ( '">' );
-        !overflow && r.push ( day );
-        r.push ( '</span></td>' );
+        if ( !overflow ) {
+          r.push ( '<span>' );
+          r.push ( date.getDate () );
+          r.push ( '</span>' );
+        }
+        r.push ( '</td>' );
         return r.join ( '' );
       }
     , week : function ( month, week, days ) {
@@ -57,7 +58,7 @@ var Calendar = (function (api) {
     }
   };
 
-  var renderMonth = window.renderMonth = function ( date ) {
+  var renderMonth = function ( date ) {
     var currentMonth = date.getMonth ()
       , day = new DateHelper ( date ).startOfMonth ().startOfWeek ()
       , end = new DateHelper ( date ).endOfMonth ().endOfWeek ()
@@ -68,28 +69,23 @@ var Calendar = (function (api) {
       ;
 
     while ( day.date.getTime () <= end.date.getTime () ) {
-      week.push ( this.options.render.day ( day.date.getMonth (), day.date.getDate (), false, false, false, day.date.getMonth () !== currentMonth ) );
+      week.push ( this.options.render.day.call ( this, day.date, day.date.getMonth () !== currentMonth ) );
       i++;
       if ( i % 7 === 0 ) {
-        month.push ( this.options.render.week ( day.date.getMonth (), w++, week ) );
+        month.push ( this.options.render.week.call ( this, day.date.getMonth (), w++, week ) );
         week = [];
       }
       day.nextDay ();
     }
 
-    return this.options.render.month ( currentMonth, month, this.options.render.header ( currentMonth ), this.options.render.footer () );
+    return this.options.render.month.call ( this, currentMonth, month, this.options.render.header ( currentMonth ), this.options.render.footer () );
   }
 
   var Calendar = function ( options ) {
-    options.render && (options.render = api.extend ( {}, defaultOptions.render, options.render ));
-    this.options = api.extend ( {}, defaultOptions, options );
+    this.setOptions ( options );
     this.eventbus = new EventBus ( this, ['create'], options );
-
     this.start = new DateHelper ( this.options.startDate ).zeroTime ();
-
     this.container = api.createElement ( 'div', { class : this.options.containerClass } );
-
-    this.eventbus.fire ( 'create', this );
   };
 
   Calendar.prototype.render = function () {
@@ -102,6 +98,33 @@ var Calendar = (function (api) {
     this.container.innerHTML = months.join ( '' );
     return this;
   };
+
+  // TODO make this a mixin
+  Calendar.prototype.setOptions = function ( options ) {
+    options || (options = {});
+    this.originalOptions || (this.originalOptions = options);
+    this.options = api.extend ( {}, defaultOptions, options, this.originalOptions );
+    this.options.render = api.extend ( {}, defaultOptions.render, options.render, this.originalOptions.render );
+  };
+
+  // TODO make this a mixin
+  Calendar.prototype.use = function ( mixin ) {
+    for ( var p in mixin ) {
+      if ( mixin.hasOwnProperty ( p ) ) {
+        if ( 'options' === p ) {
+          this.setOptions ( mixin.options );
+        } else if ( 'init' === p ) {
+          mixin [ p ].call ( this );
+        } else {
+          this [ p ] = mixin [ p ];
+        }
+      }
+    }
+
+    return this;
+  };
+
+  Calendar.mixin = {};
 
   return Calendar;
 
