@@ -9,21 +9,15 @@ Calendar.mixin.invalid = ( function () {
   , invalid : function ( date ) {
       return date.getTime () < today;
     }
-  , render : {
-      day : function ( date, overflow, tdClass ) {
-        var r = [ '<td class="day' ];
-        tdClass && r.push ( ' ' ) && r.push ( tdClass );
-        this.options.invalid ( date ) && r.push ( ' ' ) && r.push ( this.options.invalidClass );
-        r.push ( '">' );
-        if ( !overflow ) {
-          r.push ( '<span>' );
-          r.push ( date.getDate () );
-          r.push ( '</span>' );
-        }
-        r.push ( '</td>' );
-        return r.join ( '' );
-      }
-    }
+  };
+
+  // TODO improve setOptions mixin to do this automatically so it can be moved to the mixin options to be overridden
+  Invalid.init = function () {
+    var renderDay = this.options.render.day;
+    this.options.render.day = function ( date, overflow, tdClass ) {
+      this.options.invalid ( date ) && (tdClass = (tdClass || '') + ' ' + this.options.invalidClass );
+      return renderDay.call ( this, date, overflow, tdClass );
+    };
   };
 
   return Invalid;

@@ -15,10 +15,12 @@ var Calendar = (function (api) {
     months : 1
   , startOfWeek : 0
   , containerClass : 'calendar'
+  , dayClass : 'day'
   , daySelector : '.day'
   , render : {
       day : function ( date, overflow, tdClass ) {
-        var r = [ '<td class="day' ];
+        var r = [ '<td data-date="', date.getTime (), '" class="' ];
+        overflow || r.push ( this.options.dayClass );
         tdClass && r.push ( ' ' ) && r.push ( tdClass );
         r.push ( '">' );
         if ( !overflow ) {
@@ -96,30 +98,36 @@ var Calendar = (function (api) {
     }
     this.options.render.posttext && months.push ( this.options.render.posttext );
     this.container.innerHTML = months.join ( '' );
+    
+    this.days = {};
+    var days = api.select ( this.options.daySelector, this.container )
+      , d;
+    for (var i = days.length - 1; i >= 0; i--) {
+      d = days [ i ].getAttribute( 'data-date' );
+      this.days [ d ] = days [ i ];
+    };
+    
     return this;
   };
 
-  // TODO make this a mixin
   Calendar.prototype.setOptions = function ( options ) {
     options || (options = {});
     this.originalOptions || (this.originalOptions = options);
-    this.options = api.extend ( {}, defaultOptions, options, this.originalOptions );
-    this.options.render = api.extend ( {}, defaultOptions.render, options.render, this.originalOptions.render );
+    var ops = this.options || defaultOptions;
+    this.options = api.extend ( {}, ops, options, this.originalOptions );
+    this.options.render = api.extend ( {}, ops.render, options.render, this.originalOptions.render );
   };
 
-  // TODO make this a mixin
   Calendar.prototype.use = function ( mixin ) {
+    mixin.options && (this.setOptions ( mixin.options ));
     for ( var p in mixin ) {
       if ( mixin.hasOwnProperty ( p ) ) {
-        if ( 'options' === p ) {
-          this.setOptions ( mixin.options );
-        } else if ( 'init' === p ) {
-          mixin [ p ].call ( this );
-        } else {
+        if ( 'options' !== p && 'init' !== p ) {
           this [ p ] = mixin [ p ];
         }
       }
     }
+    mixin.init && mixin.init.call ( this );
 
     return this;
   };

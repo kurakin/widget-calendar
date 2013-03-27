@@ -54,6 +54,14 @@ var DateHelper = (function (api, undefined) {
     return new DateHelper ( this.date );
   };
 
+  DateHelper.prototype.next = function ( day ) {
+    var d = this.date.getDay ();
+    this.date.setDate ( this.date.getDate () + (d < day ? day - d : 7 - d + day) );
+    return this;
+  };
+
+  DateHelper.prototype.nextFriday = function () { return this.next ( 5 ); }
+
   return DateHelper;
 
 }(api));

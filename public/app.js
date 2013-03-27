@@ -26,6 +26,8 @@ $( function () {
       }
     })
       .use ( Calendar.mixin.invalid )
+      .use ( Calendar.mixin.selection )
+      .select ( new DateHelper ().zeroTime ().nextFriday ().toDate () )
       .render ()
       .container
   );
@@ -39,6 +41,8 @@ $( function () {
       }
     })
       .use ( Calendar.mixin.invalid )
+      .use ( Calendar.mixin.selection )
+      .select ( new DateHelper ().zeroTime ().nextFriday ().toDate () )
       .render ()
       .container
   );

@@ -31,7 +31,5 @@ api.checkBrowser   = function () {
   });
 };
 
-api.select = function ( selector, elmt ) { return (elmt || document).getElements ( selector ); };
-api.find = function ( selector, elmt ) { return (elmt || document).getElement ( selector ); };
-
-var syncro = new Syncro ();
+api.select = function ( selector, elmt ) { return $(elmt || document).find ( selector ); };
+api.find = function ( selector, elmt ) { return $(elmt || document).find ( selector ).first (); };
